@@ -12,7 +12,7 @@ const AbasVacinas = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Tetravalente" component={TetravalenteScreen} />
-      <Tab.Screen name="Pneumocócica Conjugada" component={PneumococicaScreen} />
+      <Tab.Screen name="Pneumocócica " component={PneumococicaScreen} />
       <Tab.Screen name="Hepatite B" component={HepatiteBScreen} />
       <Tab.Screen name="Febre Amarela" component={FebreAmarelaScreen} />
       <Tab.Screen name="HPV4" component={HPV4Screen} />

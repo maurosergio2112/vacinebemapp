@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import { TextInputMask } from 'react-native-masked-text';
 
 const RegistroUsuarioScreen = ({ navigation }) => {
   const [nome, setNome] = useState('');
@@ -11,9 +10,16 @@ const RegistroUsuarioScreen = ({ navigation }) => {
   const [sexo, setSexo] = useState('');
   const [condicoesEspeciais, setCondicoesEspeciais] = useState('');
   const [profissao, setProfissao] = useState('');
+  const [dataNascimentoError, setDataNascimentoError] = useState('');
 
   const handleRegistro = async () => {
     try {
+      // Validar a data de nascimento
+      if (!isValidDate(dataNascimento)) {
+        setDataNascimentoError('Formato de data inválido (dd/mm/aaaa)');
+        return;
+      }
+
       const usuario = {
         nome,
         dataNascimento,
@@ -30,6 +36,12 @@ const RegistroUsuarioScreen = ({ navigation }) => {
     }
   };
 
+  const isValidDate = (dateString) => {
+    // Regex para validar o formato de data (dd/mm/aaaa)
+    const regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+    return regex.test(dateString);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registro de Usuário</Text>
@@ -39,12 +51,22 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         value={nome}
         onChangeText={setNome}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Data de Nascimento"
+      <TextInputMask
+        style={[styles.input, dataNascimentoError && styles.inputError]}
+        placeholder="Data de Nascimento (dd/mm/aaaa)"
+        type={'datetime'}
+        options={{
+          format: 'DD/MM/YYYY',
+        }}
         value={dataNascimento}
-        onChangeText={setDataNascimento}
+        onChangeText={(formatted, extracted) => {
+          setDataNascimento(formatted);
+          setDataNascimentoError('');
+        }}
       />
+      {dataNascimentoError ? (
+        <Text style={styles.errorText}>{dataNascimentoError}</Text>
+      ) : null}
       <TextInput
         style={styles.input}
         placeholder="CPF"
@@ -93,6 +115,13 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
     marginBottom: 10,
   },
 });

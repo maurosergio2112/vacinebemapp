@@ -11,7 +11,7 @@ import { AntDesign } from '@expo/vector-icons';
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo à aplicação de vacinas!</Text>
+      <Text style={styles.title}>Bem-vindo ao VacineBemApp!</Text>
 
       <TouchableOpacity
         style={styles.button}
