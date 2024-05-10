@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
 import { TextInputMask } from 'react-native-masked-text';
 
 const RegistroUsuarioScreen = ({ navigation }) => {
@@ -79,18 +80,28 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         value={sexo}
         onChangeText={setSexo}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Condições Especiais"
-        value={condicoesEspeciais}
-        onChangeText={setCondicoesEspeciais}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Profissão"
-        value={profissao}
-        onChangeText={setProfissao}
-      />
+      <View style={styles.input}>
+        <Picker
+          selectedValue={condicoesEspeciais}
+          onValueChange={(itemValue) => setCondicoesEspeciais(itemValue)}>
+          <Picker.Item label="Selecione uma condição especial" value="" />
+          <Picker.Item label="Doenças Crônicas" value="Doenças Crônicas" />
+          <Picker.Item label="Imunossupressão" value="Imunossupressão" />
+          <Picker.Item label="Doenças Neurológicas" value="Doenças Neurológicas" />
+          <Picker.Item label="Nenhuma" value="Nenhuma" />
+        </Picker>
+      </View>
+      <View style={styles.input}>
+        <Picker
+          selectedValue={profissao}
+          onValueChange={(itemValue) => setProfissao(itemValue)}>
+          <Picker.Item label="Selecione uma profissão" value="" />
+          <Picker.Item label="Profissionais de Saúde" value="Profissionais de Saúde" />
+          <Picker.Item label="Profissionais do Setor de Alimentos" value="Profissionais do Setor de Alimentos" />
+          <Picker.Item label="Profissionais de Limpeza" value="Profissionais de Limpeza" />
+          <Picker.Item label="Outra" value="Outra" />
+        </Picker>
+      </View>
       <Button title="Registrar" onPress={handleRegistro} />
     </View>
   );
