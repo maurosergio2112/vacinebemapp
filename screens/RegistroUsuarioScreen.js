@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { TextInputMask } from 'react-native-masked-text';
@@ -15,7 +15,6 @@ const RegistroUsuarioScreen = ({ navigation }) => {
 
   const handleRegistro = async () => {
     try {
-      // Validar a data de nascimento
       if (!isValidDate(dataNascimento)) {
         setDataNascimentoError('Formato de data inválido (dd/mm/aaaa)');
         return;
@@ -31,14 +30,13 @@ const RegistroUsuarioScreen = ({ navigation }) => {
       };
       await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
       console.log('Dados do usuário registrados com sucesso:', usuario);
-      navigation.navigate('Home'); // Navegar para a tela Home após o registro
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Erro ao registrar os dados do usuário:', error);
     }
   };
 
   const isValidDate = (dateString) => {
-    // Regex para validar o formato de data (dd/mm/aaaa)
     const regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
     return regex.test(dateString);
   };
@@ -74,16 +72,23 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         value={cpf}
         onChangeText={setCpf}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Sexo"
-        value={sexo}
-        onChangeText={setSexo}
-      />
-      <View style={styles.input}>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={sexo}
+          onValueChange={(itemValue) => setSexo(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Selecione o sexo" value="" />
+          <Picker.Item label="Masculino" value="Masculino" />
+          <Picker.Item label="Feminino" value="Feminino" />
+        </Picker>
+      </View>
+      <View style={styles.pickerContainer}>
         <Picker
           selectedValue={condicoesEspeciais}
-          onValueChange={(itemValue) => setCondicoesEspeciais(itemValue)}>
+          onValueChange={(itemValue) => setCondicoesEspeciais(itemValue)}
+          style={styles.picker}
+        >
           <Picker.Item label="Selecione uma condição especial" value="" />
           <Picker.Item label="Doenças Crônicas" value="Doenças Crônicas" />
           <Picker.Item label="Imunossupressão" value="Imunossupressão" />
@@ -91,10 +96,12 @@ const RegistroUsuarioScreen = ({ navigation }) => {
           <Picker.Item label="Nenhuma" value="Nenhuma" />
         </Picker>
       </View>
-      <View style={styles.input}>
+      <View style={styles.pickerContainer}>
         <Picker
           selectedValue={profissao}
-          onValueChange={(itemValue) => setProfissao(itemValue)}>
+          onValueChange={(itemValue) => setProfissao(itemValue)}
+          style={styles.picker}
+        >
           <Picker.Item label="Selecione uma profissão" value="" />
           <Picker.Item label="Profissionais de Saúde" value="Profissionais de Saúde" />
           <Picker.Item label="Profissionais do Setor de Alimentos" value="Profissionais do Setor de Alimentos" />
@@ -102,7 +109,9 @@ const RegistroUsuarioScreen = ({ navigation }) => {
           <Picker.Item label="Outra" value="Outra" />
         </Picker>
       </View>
-      <Button title="Registrar" onPress={handleRegistro} />
+      <TouchableOpacity style={styles.button} onPress={handleRegistro}>
+        <Text style={styles.buttonText}>Registrar</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -113,27 +122,58 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#333',
     marginBottom: 20,
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#fff',
   },
   inputError: {
     borderColor: 'red',
   },
+  pickerContainer: {
+    width: '100%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 15,
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  picker: {
+    width: '100%',
+    height: '100%',
+  },
+  button: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#007bff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   errorText: {
     color: 'red',
-    marginBottom: 10,
+    marginBottom: 15,
   },
 });
 
