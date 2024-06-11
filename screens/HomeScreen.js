@@ -28,13 +28,21 @@ const HomeScreen = ({ navigation }) => {
         <AntDesign name="form" size={24} color="black" />
         <Text style={styles.buttonText}>Registro de Vacina</Text>
       </TouchableOpacity>
+       
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('RecomendacoesdeVacinas')}
+      >
+        <AntDesign name="medicinebox" size={24} color="black" />
+        <Text style={styles.buttonText}>RecomendacoesDeVacinas</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('AbasVacinas')}
       >
         <AntDesign name="medicinebox" size={24} color="black" />
-        <Text style={styles.buttonText}>Vacinas Recomendadas</Text>
+        <Text style={styles.buttonText}>Sobre vacinas</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

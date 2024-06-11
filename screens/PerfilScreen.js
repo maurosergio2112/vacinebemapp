@@ -12,169 +12,147 @@ const PerfilScreen = () => {
         const userData = await AsyncStorage.getItem('usuario');
         if (userData) {
           const parsedUserData = JSON.parse(userData);
+          parsedUserData.idade = calcularIdade(parsedUserData.dataNascimento);
           setUsuario(parsedUserData);
-          const vacinas = getRecomendacoesVacinas(parsedUserData);
-          setVacinasRecomendadas(vacinas);
         }
       } catch (error) {
-        console.error('Erro ao obter dados do usuário:', error);
+        console.error('Erro ao carregar os dados do usuário:', error);
       }
     };
 
     getUsuario();
   }, []);
 
-  const getRecomendacoesVacinas = (usuario) => {
-    const { condicoesEspeciais, profissao } = usuario;
-
-    const vacinasIdososSemCondicoes = [
-      "Tetravalente (contra difteria, tétano, coqueluche e Haemophilus influenzae tipo b)",
-      "Pneumocócica (para prevenir pneumonia e infecções pneumocócicas)",
-      "Hepatite B",
-      "Febre Amarela (especialmente se viver ou viajar para áreas endêmicas)",
-      "Covid-19",
-      "dTpa (reforço a cada 10 anos para difteria, tétano e coqueluche)",
-      "Herpes Zoster (para prevenir o herpes zoster)",
-      "SCR (Sarampo, Caxumba e Rubéola)",
-      "Dupla Bacteriana (difteria e tétano)",
-    ];
-
-    const vacinasDoencasCronicas = [
-      ...vacinasIdososSemCondicoes,
-      "Influenza (anual, a ser considerada conforme atualizações das vacinas disponíveis)",
-    ];
-
-    const vacinasImunossuprimidos = [
-      ...vacinasIdososSemCondicoes,
-      "Influenza (anual, a ser considerada conforme atualizações das vacinas disponíveis)",
-    ];
-
-    const vacinasDoencasNeurologicas = [
-      ...vacinasIdososSemCondicoes,
-      "Influenza (anual, a ser considerada conforme atualizações das vacinas disponíveis)",
-    ];
-
-    const vacinasProfissionaisSaude = [
-      ...vacinasIdososSemCondicoes,
-      "VSR (Vírus Sincicial Respiratório) (especialmente se trabalhar com crianças ou idosos)",
-    ];
-
-    const vacinasProfissionaisSetorAlimentos = vacinasIdososSemCondicoes;
-
-    const vacinasProfissionaisLimpeza = vacinasIdososSemCondicoes;
-
-    if (condicoesEspeciais === 'Nenhuma' && profissao === 'Outra') {
-      return vacinasIdososSemCondicoes;
-    } else if (condicoesEspeciais === 'Doenças Crônicas') {
-      return vacinasDoencasCronicas;
-    } else if (condicoesEspeciais === 'Imunossupressão') {
-      return vacinasImunossuprimidos;
-    } else if (condicoesEspeciais === 'Doenças Neurológicas') {
-      return vacinasDoencasNeurologicas;
-    } else if (profissao === 'Profissionais de Saúde') {
-      return vacinasProfissionaisSaude;
-    } else if (profissao === 'Profissionais do Setor de Alimentos') {
-      return vacinasProfissionaisSetorAlimentos;
-    } else if (profissao === 'Profissionais de Limpeza') {
-      return vacinasProfissionaisLimpeza;
-    } else {
-      return [];
+  useEffect(() => {
+    if (usuario) {
+      determinarVacinasRecomendadas(usuario);
     }
+  }, [usuario]);
+
+  const calcularIdade = (dataNascimento) => {
+    const [dia, mes, ano] = dataNascimento.split('/');
+    const nascimento = new Date(ano, mes - 1, dia);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mesDiferenca = hoje.getMonth() - nascimento.getMonth();
+    if (mesDiferenca < 0 || (mesDiferenca === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+    return idade;
+  };
+
+  const determinarVacinasRecomendadas = (usuario) => {
+    let vacinas = [];
+    if (usuario.sexo === 'Feminino') {
+      vacinas.push('Vacina contra o HPV');
+    }
+    if (usuario.idade >= 60) {
+      vacinas.push('Vacina contra a gripe');
+      vacinas.push('Vacina contra pneumonia');
+    }
+    if (usuario.condicoesEspeciais) {
+      usuario.condicoesEspeciais.forEach((condicao) => {
+        if (condicao === 'Doenças Crônicas' || condicao === 'Imunossupressão') {
+          vacinas.push('Vacina contra hepatite B');
+        }
+        if (condicao === 'Doenças Neurológicas') {
+          vacinas.push('Vacina contra meningite');
+        }
+      });
+    }
+    if (usuario.profissao) {
+      if (usuario.profissao === 'Profissionais de Saúde') {
+        vacinas.push('Vacina contra hepatite B');
+        vacinas.push('Vacina contra a gripe');
+      }
+      if (usuario.profissao === 'Profissionais do Setor de Alimentos e Bebidas') {
+        vacinas.push('Vacina contra hepatite A');
+      }
+      if (usuario.profissao === 'Militares, policiais e bombeiros') {
+        vacinas.push('Vacina contra febre amarela');
+        vacinas.push('Vacina contra tétano');
+      }
+      // Adicione outras condições baseadas em profissões conforme necessário
+    }
+    setVacinasRecomendadas(vacinas);
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Perfil do Usuário</Text>
       {usuario ? (
-        <ScrollView contentContainerStyle={styles.infoContainer}>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>Nome:</Text>
-            <Text style={styles.value}>{usuario.nome}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>Data de Nascimento:</Text>
-            <Text style={styles.value}>{usuario.dataNascimento}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>CPF:</Text>
-            <Text style={styles.value}>{usuario.cpf}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>Sexo:</Text>
-            <Text style={styles.value}>{usuario.sexo}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>Condições Especiais:</Text>
-            <Text style={styles.value}>{usuario.condicoesEspeciais}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.label}>Profissão:</Text>
-            <Text style={styles.value}>{usuario.profissao}</Text>
-          </View>
-          <Text style={styles.subtitle}>Recomendações de Vacinas:</Text>
-          {vacinasRecomendadas.length > 0 ? (
-            vacinasRecomendadas.map((vacina, index) => (
-              <Text key={index} style={styles.vaccineItem}>- {vacina}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.label}>Nome:</Text>
+          <Text style={styles.info}>{usuario.nome}</Text>
+
+          <Text style={styles.label}>Idade:</Text>
+          <Text style={styles.info}>{usuario.idade} anos</Text>
+
+          <Text style={styles.label}>CPF:</Text>
+          <Text style={styles.info}>{usuario.cpf}</Text>
+
+          <Text style={styles.label}>Sexo:</Text>
+          <Text style={styles.info}>{usuario.sexo}</Text>
+
+          <Text style={styles.label}>Condições Especiais:</Text>
+          {usuario.condicoesEspeciais && usuario.condicoesEspeciais.length > 0 ? (
+            usuario.condicoesEspeciais.map((condicao, index) => (
+              <Text key={index} style={styles.info}>{condicao}</Text>
             ))
           ) : (
-            <Text style={styles.noRecommendations}>Sem recomendações específicas.</Text>
+            <Text style={styles.info}>Nenhuma</Text>
           )}
-        </ScrollView>
+
+          <Text style={styles.label}>Profissão:</Text>
+          <Text style={styles.info}>{usuario.profissao}</Text>
+
+          <Text style={styles.label}>Vacinas Recomendadas:</Text>
+          {vacinasRecomendadas.length > 0 ? (
+            vacinasRecomendadas.map((vacina, index) => (
+              <Text key={index} style={styles.info}>{vacina}</Text>
+            ))
+          ) : (
+            <Text style={styles.info}>Nenhuma recomendação específica</Text>
+          )}
+        </View>
       ) : (
-        <Text style={styles.loading}>Carregando dados do usuário...</Text>
+        <Text style={styles.info}>Carregando informações do usuário...</Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flexGrow: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20,
     color: '#333',
+    marginBottom: 20,
   },
   infoContainer: {
-    alignItems: 'flex-start',
-  },
-  userInfo: {
-    flexDirection: 'row',
-    marginBottom: 10,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   label: {
-    fontWeight: 'bold',
-    color: '#555',
-  },
-  value: {
-    marginLeft: 10,
-    color: '#777',
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    color: '#333',
-  },
-  vaccineItem: {
-    fontSize: 16,
-    color: '#555',
-    marginBottom: 5,
-  },
-  noRecommendations: {
-    fontSize: 16,
-    color: '#999',
-  },
-  loading: {
     fontSize: 18,
-    color: '#999',
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 10,
+  },
+  info: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 5,
   },
 });
 

@@ -9,7 +9,7 @@ const RegistroUsuarioScreen = ({ navigation }) => {
   const [dataNascimento, setDataNascimento] = useState('');
   const [cpf, setCpf] = useState('');
   const [sexo, setSexo] = useState('');
-  const [condicoesEspeciais, setCondicoesEspeciais] = useState('');
+  const [condicoesEspeciais, setCondicoesEspeciais] = useState([]);
   const [profissao, setProfissao] = useState('');
   const [dataNascimentoError, setDataNascimentoError] = useState('');
 
@@ -39,6 +39,16 @@ const RegistroUsuarioScreen = ({ navigation }) => {
   const isValidDate = (dateString) => {
     const regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
     return regex.test(dateString);
+  };
+
+  const handleCondicoesEspeciaisChange = (itemValue) => {
+    setCondicoesEspeciais((prev) => {
+      if (prev.includes(itemValue)) {
+        return prev.filter((item) => item !== itemValue);
+      } else {
+        return [...prev, itemValue];
+      }
+    });
   };
 
   return (
@@ -85,8 +95,8 @@ const RegistroUsuarioScreen = ({ navigation }) => {
       </View>
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={condicoesEspeciais}
-          onValueChange={(itemValue) => setCondicoesEspeciais(itemValue)}
+          selectedValue=""
+          onValueChange={handleCondicoesEspeciaisChange}
           style={styles.picker}
         >
           <Picker.Item label="Selecione uma condição especial" value="" />
@@ -104,8 +114,20 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         >
           <Picker.Item label="Selecione uma profissão" value="" />
           <Picker.Item label="Profissionais de Saúde" value="Profissionais de Saúde" />
-          <Picker.Item label="Profissionais do Setor de Alimentos" value="Profissionais do Setor de Alimentos" />
-          <Picker.Item label="Profissionais de Limpeza" value="Profissionais de Limpeza" />
+          <Picker.Item label="Profissionais do Setor de Alimentos e Bebidas" value="ProfissionaisdeAlimentos" />
+          <Picker.Item label="Militares, policiais e bombeiros" value="MilitaresPoliciaisBombeiros" />
+          <Picker.Item label="Profissionais que lidam com dejetos, águas contaminadas e coletores de lixo" value="ProfissionaisLimpeza" />
+          <Picker.Item label="Profissionais que lidam com Crianças" value="CuidadoresdeCrianças" />
+          <Picker.Item label="Profissionais que lidam com Animais" value="veterinarios" />
+          <Picker.Item label="Profissionais do sexo" value="Profissionaisdosexo" />
+          <Picker.Item label="Profissionais administrativos" value="Profissionaisadministrativos" />
+          <Picker.Item label="Profissionais que viajam muito" value="ProfissionaisqueViajam" />
+          <Picker.Item label="Receptivos de estrangeiros" value="ReceptivosdeEstrangeiros" />
+          <Picker.Item label="Manicures, pedicures, podólogos e tatuadores" value="ManicuresPedicuresPodologosTatuadores" />
+          <Picker.Item label="Profissionais que trabalham em regime de confinamento" value="ProfissionaisConfinamento" />
+          <Picker.Item label="Profissionais e voluntários em campos de refugiados, situações de catástrofe e ajuda humanitária" value="VoluntariosAjudaHumanitaria" />
+          <Picker.Item label="Atletas profissionais" value="Atletas" />
+          <Picker.Item label="Cuidadores" value="Cuidadores" />
           <Picker.Item label="Outra" value="Outra" />
         </Picker>
       </View>

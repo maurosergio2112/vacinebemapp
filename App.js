@@ -10,6 +10,7 @@ import CartaoVacinaScreen from "./screens/CartaovacinaScreen";
 import DadosdasVacinasScreen from "./screens/DadosdasVacinasScreen";
 import PerfilScreen from "./screens/PerfilScreen";
 import RegistroUsuarioScreen from "./screens/RegistroUsuarioScreen";
+import RecomendacoesVacinas from "./screens/RecomendacoesVacinas"
 
 const Stack = createStackNavigator();
 // Registro do componente App
@@ -31,6 +32,13 @@ const App = () => {
           component={HomeScreen}
           options={{ title: "Home" }}
         />
+        <Stack.Screen
+          name="RecomendacoesdeVacinas"
+          component={RecomendacoesVacinas}
+          options={{ title: "Recomendacoes de Vacinas" }}
+        />
+
+
         <Stack.Screen
           name="Questionario"
           component={QuestionarioScreen}
