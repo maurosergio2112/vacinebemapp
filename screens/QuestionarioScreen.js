@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Switch, Button } from "react-native";
+import { View, Text, Switch, Button, StyleSheet, ScrollView } from "react-native";
 import { Formik, Field } from "formik";
 import * as yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
+import { FontAwesome5 } from '@expo/vector-icons'; // Biblioteca de ícones
 
 const schema = yup.object().shape({
   tetravalente: yup.boolean(),
@@ -59,8 +58,8 @@ const QuestionarioScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Selecione quais Vacinas deseja fazer registro</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Registro de Vacinas</Text>
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
@@ -68,31 +67,70 @@ const QuestionarioScreen = ({ navigation }) => {
       >
         {({ handleSubmit }) => (
           <View>
-            <Field name="tetravalente" component={CheckBox} />
-            <Field name="pneumococica" component={CheckBox} />
-            <Field name="hepatiteB" component={CheckBox} />
-            <Field name="febreAmarela" component={CheckBox} />
-            <Field name="hpv4" component={CheckBox} />
-            <Field name="vzr" component={CheckBox} />
-            <Field name="tripliceviral" component={CheckBox} />
-            <Field name="vacinaVSR" component={CheckBox} />
-            <Field name="vacinaDuplaBacteriana" component={CheckBox} />
-            <Button title="Salvar Respostas" onPress={handleSubmit} />
+            <Field name="tetravalente" component={CheckBox} label="Registrar vacina Tetravalente?" icon="syringe" />
+            <Field name="pneumococica" component={CheckBox} label="Registrar vacina Pneumocócica?" icon="syringe" />
+            <Field name="hepatiteB" component={CheckBox} label="Registrar vacina Hepatite B?" icon="syringe" />
+            <Field name="febreAmarela" component={CheckBox} label="Registrar vacina Febre Amarela?" icon="syringe" />
+            <Field name="hpv4" component={CheckBox} label="Registrar vacina HPV (Quadrivalente)?" icon="syringe" />
+            <Field name="tripliceviral" component={CheckBox} label="Registrar vacina Tríplice Viral?" icon="syringe" />
+            <Field name="vzr" component={CheckBox} label="Registrar vacina Varicela (VZR)?" icon="syringe" />
+            <Field name="vacinaVSR" component={CheckBox} label="Registrar vacina VSR?" icon="syringe" />
+            <Field name="vacinaDuplaBacteriana" component={CheckBox} label="Registrar vacina Dupla Bacteriana?" icon="syringe" />
+            <Button title="Salvar Respostas" onPress={handleSubmit} color="#2196F3" />
           </View>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
-const CheckBox = ({ field, form, ...props }) => (
-  <View style={{ flexDirection: "row", alignItems: "center" }}>
-    <Text>{field.name}</Text>
+const CheckBox = ({ field, form, label, icon, ...props }) => (
+  <View style={styles.checkboxContainer}>
+    <FontAwesome5 name={icon} size={24} color="#555" style={styles.icon} />
+    <Text style={styles.label}>{label}</Text>
     <Switch
       value={field.value}
       onValueChange={(newValue) => form.setFieldValue(field.name, newValue)}
     />
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f7f7f7",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: "#333",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "100%",
+  },
+  icon: {
+    marginRight: 10,
+  },
+  label: {
+    flex: 1,
+    fontSize: 18,
+    color: "#555",
+  },
+});
 
 export default QuestionarioScreen;

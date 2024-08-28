@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import { MaterialIcons } from '@expo/vector-icons'; // Para ícones de vacina
 
 const CartaoVacinaScreen = () => {
   const [usuario, setUsuario] = useState(null);
@@ -23,11 +22,9 @@ const CartaoVacinaScreen = () => {
 
     const getRespostas = async () => {
       try {
-        // Recuperar as respostas do questionário do AsyncStorage
         const jsonValue = await AsyncStorage.getItem('respostasQuestionario');
         if (jsonValue !== null) {
           const respostasDoQuestionario = JSON.parse(jsonValue);
-          // Separar as respostas marcadas como sim e não
           const respostasSim = [];
           const respostasNao = [];
           for (const key in respostasDoQuestionario) {
@@ -50,10 +47,10 @@ const CartaoVacinaScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {usuario && (
-        <View style={styles.userInfo}>
-          <Text style={styles.sectionTitle}>Perfil do Vacinante:</Text>
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Perfil do Vacinante</Text>
           <Text style={styles.userInfoText}>Nome: {usuario.nome}</Text>
           <Text style={styles.userInfoText}>Data de Nascimento: {usuario.dataNascimento}</Text>
           <Text style={styles.userInfoText}>CPF: {usuario.cpf}</Text>
@@ -62,47 +59,71 @@ const CartaoVacinaScreen = () => {
           <Text style={styles.userInfoText}>Profissão: {usuario.profissao}</Text>
         </View>
       )}
-      <Text style={styles.sectionTitle}>Vacinas registradas:</Text>
-      <View style={styles.vaccineList}>
-        {respostasSim.map((resposta, index) => (
-          <Text key={index} style={styles.vaccineItem}>{resposta}</Text>
-        ))}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Vacinas Registradas</Text>
+        <View style={styles.vaccineList}>
+          {respostasSim.map((resposta, index) => (
+            <View key={index} style={styles.vaccineItem}>
+              <MaterialIcons name="check-circle" size={20} color="green" />
+              <Text style={styles.vaccineText}>{resposta}</Text>
+            </View>
+          ))}
+        </View>
       </View>
-      <Text style={styles.sectionTitle}>Vacinas que não foram registradas:</Text>
-      <View style={styles.vaccineList}>
-        {respostasNao.map((resposta, index) => (
-          <Text key={index} style={styles.vaccineItem}>{resposta}</Text>
-        ))}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Vacinas Não Registradas</Text>
+        <View style={styles.vaccineList}>
+          {respostasNao.map((resposta, index) => (
+            <View key={index} style={styles.vaccineItem}>
+              <MaterialIcons name="cancel" size={20} color="red" />
+              <Text style={styles.vaccineText}>{resposta}</Text>
+            </View>
+          ))}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexGrow: 1,
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  userInfo: {
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 15,
     marginBottom: 20,
-  },
-  userInfoText: {
-    marginBottom: 5,
-    fontSize: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#333',
     marginBottom: 10,
   },
+  userInfoText: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 8,
+  },
   vaccineList: {
-    marginBottom: 20,
+    marginTop: 10,
   },
   vaccineItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  vaccineText: {
     fontSize: 16,
-    marginBottom: 5,
+    color: '#555',
+    marginLeft: 10,
   },
 });
 

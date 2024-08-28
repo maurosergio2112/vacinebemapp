@@ -19,6 +19,17 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         setDataNascimentoError('Formato de data inválido (dd/mm/aaaa)');
         return;
       }
+      const salvarDados = async () => {
+        const usuario = { profissao, condicoesEspeciais };
+        try {
+            await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
+            console.log('Dados salvos:', usuario);
+            Alert.alert('Dados salvos com sucesso!');
+            navigation.navigate('RecomendacoesDeVacinas');
+        } catch (error) {
+            console.error('Erro ao salvar os dados do usuário', error);
+        }
+    };
 
       const usuario = {
         nome,
