@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { TextInputMask } from 'react-native-masked-text';
@@ -9,28 +9,19 @@ const RegistroUsuarioScreen = ({ navigation }) => {
   const [dataNascimento, setDataNascimento] = useState('');
   const [cpf, setCpf] = useState('');
   const [sexo, setSexo] = useState('');
-  const [condicoesEspeciais, setCondicoesEspeciais] = useState([]);
+  const [condicoesEspeciais, setCondicoesEspeciais] = useState([]); // Array para múltiplas seleções
   const [profissao, setProfissao] = useState('');
   const [dataNascimentoError, setDataNascimentoError] = useState('');
 
   const handleRegistro = async () => {
     try {
+      // Validação de data
       if (!isValidDate(dataNascimento)) {
         setDataNascimentoError('Formato de data inválido (dd/mm/aaaa)');
         return;
       }
-      const salvarDados = async () => {
-        const usuario = { profissao, condicoesEspeciais };
-        try {
-            await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
-            console.log('Dados salvos:', usuario);
-            Alert.alert('Dados salvos com sucesso!');
-            navigation.navigate('RecomendacoesDeVacinas');
-        } catch (error) {
-            console.error('Erro ao salvar os dados do usuário', error);
-        }
-    };
 
+      // Cria o objeto de usuário
       const usuario = {
         nome,
         dataNascimento,
@@ -39,25 +30,34 @@ const RegistroUsuarioScreen = ({ navigation }) => {
         condicoesEspeciais,
         profissao,
       };
+
+      // Salva os dados no AsyncStorage
       await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
       console.log('Dados do usuário registrados com sucesso:', usuario);
-      navigation.navigate('Home');
-    } catch (error) {
-      console.error('Erro ao registrar os dados do usuário:', error);
-    }
-  };
+     
+       // Exibe um alerta de sucesso
+    Alert.alert('Dados salvos com sucesso!');
 
+         // Redireciona para a tela Home
+    navigation.navigate('Home');
+  } catch (error) {
+    console.error('Erro ao registrar os dados do usuário:', error);
+  }
+};
+
+  // Função para validar a data de nascimento
   const isValidDate = (dateString) => {
     const regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
     return regex.test(dateString);
   };
 
+  // Função para adicionar/remover condições especiais
   const handleCondicoesEspeciaisChange = (itemValue) => {
     setCondicoesEspeciais((prev) => {
       if (prev.includes(itemValue)) {
-        return prev.filter((item) => item !== itemValue);
+        return prev.filter((item) => item !== itemValue); // Remove a condição se já está selecionada
       } else {
-        return [...prev, itemValue];
+        return [...prev, itemValue]; // Adiciona a condição se não está selecionada
       }
     });
   };
@@ -106,7 +106,7 @@ const RegistroUsuarioScreen = ({ navigation }) => {
       </View>
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue=""
+          selectedValue={''} // Força uma nova seleção a cada vez
           onValueChange={handleCondicoesEspeciaisChange}
           style={styles.picker}
         >
@@ -123,8 +123,7 @@ const RegistroUsuarioScreen = ({ navigation }) => {
           onValueChange={(itemValue) => setProfissao(itemValue)}
           style={styles.picker}
         >
-          <Picker.Item label="Selecione uma profissão" value="" />
-          <Picker.Item label="Profissionais de Saúde" value="Profissionais de Saúde" />
+           <Picker.Item label="Profissionais de Saúde" value="Profissionais de Saúde" />
           <Picker.Item label="Profissionais do Setor de Alimentos e Bebidas" value="ProfissionaisdeAlimentos" />
           <Picker.Item label="Militares, policiais e bombeiros" value="MilitaresPoliciaisBombeiros" />
           <Picker.Item label="Profissionais que lidam com dejetos, águas contaminadas e coletores de lixo" value="ProfissionaisLimpeza" />
@@ -150,64 +149,16 @@ const RegistroUsuarioScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  pickerContainer: {
-    width: '100%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 15,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  picker: {
-    width: '100%',
-    height: '100%',
-  },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#007bff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 15,
-  },
+  // Estilos mantidos iguais ao original
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#f5f5f5' },
+  title: { fontSize: 28, fontWeight: 'bold', color: '#333', marginBottom: 20 },
+  input: { width: '100%', height: 50, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, paddingHorizontal: 15, marginBottom: 15, backgroundColor: '#fff' },
+  inputError: { borderColor: 'red' },
+  pickerContainer: { width: '100%', height: 50, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, marginBottom: 15, justifyContent: 'center', backgroundColor: '#fff' },
+  picker: { width: '100%', height: '100%' },
+  button: { width: '100%', height: 50, backgroundColor: '#007bff', justifyContent: 'center', alignItems: 'center', borderRadius: 8, marginTop: 20 },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  errorText: { color: 'red', marginBottom: 15 },
 });
 
 export default RegistroUsuarioScreen;

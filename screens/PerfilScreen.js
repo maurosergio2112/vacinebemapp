@@ -43,37 +43,77 @@ const PerfilScreen = () => {
 
   const determinarVacinasRecomendadas = (usuario) => {
     let vacinas = [];
-    if (usuario.sexo === 'Feminino') {
-      vacinas.push('Vacina contra o HPV');
+
+    // Recomendações baseadas na profissão do usuário
+    switch (usuario.profissao) {
+      case 'Profissionais de Saúde':
+        vacinas.push('Hepatite B', 'Influenza', 'Tríplice Viral (Sarampo, Caxumba, Rubéola)', 'Varicela', 'dTpa (Difteria, Tétano e Coqueluche)');
+        break;
+      case 'Profissionais do Setor de Alimentos e Bebidas':
+        vacinas.push('Hepatite A', 'Tifoide', 'dT (Difteria e Tétano)');
+        break;
+      case 'Militares, Policiais e Bombeiros':
+        vacinas.push('Febre Amarela', 'Hepatite B', 'Influenza', 'Meningite');
+        break;
+      case 'Profissionais que Lidam com Dejetos e Águas Contaminadas':
+        vacinas.push('Hepatite A', 'Hepatite B', 'Febre Tifoide', 'Tétano');
+        break;
+      case 'Profissionais que Trabalham com Crianças':
+        vacinas.push('Tríplice Viral (Sarampo, Caxumba, Rubéola)', 'Varicela', 'Coqueluche');
+        break;
+      case 'Profissionais que Entram em Contato com Animais':
+        vacinas.push('Raiva', 'Tétano', 'Leptospirose');
+        break;
+      case 'Profissionais do Sexo':
+        vacinas.push('Hepatite B', 'HPV', 'Meningite');
+        break;
+      case 'Profissionais Administrativos':
+        vacinas.push('Influenza', 'Hepatite B', 'dT (Difteria e Tétano)');
+        break;
+      case 'Profissionais que Viajam com Frequência':
+        vacinas.push('Febre Amarela', 'Hepatite A', 'Hepatite B');
+        break;
+      case 'Receptivos de Estrangeiros':
+        vacinas.push('Hepatite A', 'Febre Amarela', 'Influenza');
+        break;
+      case 'Manicures, Pedicures, Podólogos e Tatuadores':
+        vacinas.push('Hepatite B', 'Tétano');
+        break;
+      case 'Profissionais que Trabalham em Ambientes de Confinamento':
+        vacinas.push('BCG (Tuberculose)', 'Meningite', 'Hepatite B');
+        break;
+      case 'Profissionais em Campos de Refugiados e Ajuda Humanitária':
+        vacinas.push('Febre Amarela', 'Cólera', 'Hepatite A', 'Hepatite B');
+        break;
+      case 'Atletas Profissionais':
+        vacinas.push('Influenza', 'Hepatite A', 'Hepatite B', 'Meningite');
+        break;
+      case 'Cuidadores':
+        vacinas.push('Influenza', 'Tríplice Viral (Sarampo, Caxumba, Rubéola)', 'Hepatite B');
+        break;
+      default:
+        break;
     }
-    if (usuario.idade >= 60) {
-      vacinas.push('Vacina contra a gripe');
-      vacinas.push('Vacina contra pneumonia');
-    }
+
+    // Recomendações baseadas em condições especiais
     if (usuario.condicoesEspeciais) {
       usuario.condicoesEspeciais.forEach((condicao) => {
-        if (condicao === 'Doenças Crônicas' || condicao === 'Imunossupressão') {
-          vacinas.push('Vacina contra hepatite B');
-        }
-        if (condicao === 'Doenças Neurológicas') {
-          vacinas.push('Vacina contra meningite');
+        switch (condicao) {
+          case 'Doenças Crônicas':
+            vacinas.push('Influenza', 'VPC13 (Pneumocócica 13-valente)', 'VPP23 (Pneumocócica 23-valente)', 'Hepatite B', 'Hepatite A', 'dTpa (Difteria, Tétano e Coqueluche)', 'Zóster', 'Febre Amarela');
+            break;
+          case 'Imunossupressão':
+            vacinas.push('Influenza', 'VPC13 (Pneumocócica 13-valente)', 'VPP23 (Pneumocócica 23-valente)', 'Hepatite B', 'Meningocócica ACWY e B', 'Hepatite A', 'Zóster Recombinante', 'dTpa (Difteria, Tétano e Coqueluche)');
+            break;
+          case 'Doenças Neurológicas':
+            vacinas.push('Influenza', 'VPC13 (Pneumocócica 13-valente)', 'VPP23 (Pneumocócica 23-valente)', 'dTpa (Difteria, Tétano e Coqueluche)', 'Meningocócica ACWY e B', 'Hepatite B', 'Zóster');
+            break;
+          default:
+            break;
         }
       });
     }
-    if (usuario.profissao) {
-      if (usuario.profissao === 'Profissionais de Saúde') {
-        vacinas.push('Vacina contra hepatite B');
-        vacinas.push('Vacina contra a gripe');
-      }
-      if (usuario.profissao === 'Profissionais do Setor de Alimentos e Bebidas') {
-        vacinas.push('Vacina contra hepatite A');
-      }
-      if (usuario.profissao === 'Militares, policiais e bombeiros') {
-        vacinas.push('Vacina contra febre amarela');
-        vacinas.push('Vacina contra tétano');
-      }
-      // Adicione outras condições baseadas em profissões conforme necessário
-    }
+
     setVacinasRecomendadas(vacinas);
   };
 
@@ -116,7 +156,7 @@ const PerfilScreen = () => {
           )}
         </View>
       ) : (
-        <Text style={styles.info}>Carregando informações do usuário...</Text>
+        <Text style={styles.info}>Carregando dados do usuário...</Text>
       )}
     </ScrollView>
   );
@@ -124,35 +164,24 @@ const PerfilScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 20,
   },
   infoContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
+    marginBottom: 20,
   },
   label: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 10,
   },
   info: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 5,
+    marginBottom: 10,
   },
 });
 
