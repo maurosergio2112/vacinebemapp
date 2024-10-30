@@ -2,58 +2,52 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-
-
-
-
- // Importe os ícones desejados da biblioteca
-
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bem-vindo ao VacineBemApp!</Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('PerfilScreen')}
-      >
-        <AntDesign name="user" size={24} color="black" />
-        <Text style={styles.buttonText}>Dados do Usuário</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('PerfilScreen')}
+        >
+          <AntDesign name="user" size={40} color="black" />
+          <Text style={styles.buttonText}>Dados do Usuário</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Questionario')}
-      >
-        <AntDesign name="form" size={24} color="black" />
-        <Text style={styles.buttonText}>Registro de Vacina</Text>
-      </TouchableOpacity>
-       
-  
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Questionario')}
+        >
+          <AntDesign name="form" size={40} color="black" />
+          <Text style={styles.buttonText}>Registro de Vacina</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('AbasVacinas')}
-      >
-        <AntDesign name="medicinebox" size={24} color="black" />
-        <Text style={styles.buttonText}>Calendário de vacinação</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('AbasVacinas')}
+        >
+          <AntDesign name="medicinebox" size={40} color="black" />
+          <Text style={styles.buttonText}>Calendário de vacinação</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('CartaoVacina')}
-      >
-        <AntDesign name="idcard" size={24} color="black" />
-        <Text style={styles.buttonText}>Cartão de Vacina</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('CartaoVacina')}
+        >
+          <AntDesign name="idcard" size={40} color="black" />
+          <Text style={styles.buttonText}>Cartão de Vacina</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('DadosdasVacinasScreen')}
-      >
-        <AntDesign name="info" size={24} color="black" />
-        <Text style={styles.buttonText}>Informações sobre Vacinas</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('DadosdasVacinasScreen')}
+        >
+          <AntDesign name="info" size={40} color="black" />
+          <Text style={styles.buttonText}>Informações sobre Vacinas</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -66,19 +60,30 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: 24,
+    marginBottom: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
-    flexDirection: 'row',
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    margin: 10,
+    borderRadius: 10,
   },
   buttonText: {
-    marginLeft: 10,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 5,
   },
 });
 
