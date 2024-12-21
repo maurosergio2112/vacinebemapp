@@ -29,7 +29,7 @@ Expo CLI (para rodar o app)
 
 <img src="assets/screenshots/homescreen.jpg" alt="Tela inicial do aplicativo" width="300" align="center">
 <img src="assets/screenshots/cartaodevacina.jpg" alt="Tela  do cartão de vacina" width="300" align="center">
-<img src="assets/screenshots/dadosdevacina.jpg" alt="Tela de dadosde vacinas" width="300" align="center">
+<img src="assets/screenshots/dadosdevacinas.jpg" alt="Tela de dados de vacinas" width="300" align="center">
 <img src="assets/screenshots/registrousuario.jpg" alt="Tela de cadastro de usuário" width="300" align="center">
 <img src="assets/screenshots/perfilscreen.jpg" alt="Tela com dados do usuairo" width="300" align="center">
 <img src="assets/screenshots/registrovacina.jpg" alt="Registro de vacina" width="300" align="center">
