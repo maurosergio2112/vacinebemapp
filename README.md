@@ -27,12 +27,12 @@ Expo CLI (para rodar o app)
  Backend para sincronização de dados.
  Integração com APIs de saúde pública.
 
-<img src="assets/screenshots/homescreen.png" alt="Tela inicial do aplicativo">
-<img src="assets/screenshots/cartaodevacina.png" alt="Tela  do cartão de vacina">
-<img src="assets/screenshots/dadosdevacina.png" alt="Tela de dadosde vacinas">
-<img src="assets/screenshots/registrousuario.png" alt="Tela de cadastro de usuário">
-<img src="assets/screenshots/perfilscreen.png" alt="Tela com dados do usuairo">
-<img src="assets/screenshots/registrovacina.png" alt="Registro de vacina">
-<img src="assets/screenshots/vacinainfo.png" alt="Informações sobre vacinas">
+<img src="assets/screenshots/homescreen.jpg" alt="Tela inicial do aplicativo">
+<img src="assets/screenshots/cartaodevacina.jpg" alt="Tela  do cartão de vacina">
+<img src="assets/screenshots/dadosdevacina.jpg" alt="Tela de dadosde vacinas">
+<img src="assets/screenshots/registrousuario.jpg" alt="Tela de cadastro de usuário">
+<img src="assets/screenshots/perfilscreen.jpg" alt="Tela com dados do usuairo">
+<img src="assets/screenshots/registrovacina.jpg" alt="Registro de vacina">
+<img src="assets/screenshots/vacinainfo.jpg" alt="Informações sobre vacinas">
 
 
