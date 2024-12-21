@@ -1,0 +1,9 @@
+// autolinking.gradle
+def setupAutolinking(project) {
+    // Configuração padrão para autolinking no React Native
+    project.ext.react = [
+        enableHermes: false
+    ]
+}
+
+setupAutolinking(project)
