@@ -2,18 +2,11 @@
   "name": "vacinebemapp",
   "version": "1.0.0",
   "scripts": {
-<<<<<<< HEAD
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "test": "jest"
-=======
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
->>>>>>> 578e2cbacccfcbdcb12ab86a3e9db7c42ebb79d9
+    "web": "expo start --web",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.24.0",
